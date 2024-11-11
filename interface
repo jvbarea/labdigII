@@ -80,9 +80,9 @@ void setup() {
     buttonColor = color(90);
 
     // interface serial
-    myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
+    //myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
     // leitura de dados da porta serial até o caractere '#' (para leitura de "angulo,distancia#"
-    myPort.bufferUntil('#'); 
+    //myPort.bufferUntil('#'); 
 
 }
 
@@ -188,11 +188,16 @@ void drawText() {
   
     pushMatrix();
     // limita detecao de objetos a 100 cm
-    if(imedida_res > 100) {
-        noObject = "Não Detectado";
+    if(icomporta == 0 && ibomba == 0) {
+        noObject = "Comporta Fechada";
     }
-    else {
-        noObject = "Detectado";
+    
+    if(icomporta == 1 && ibomba == 0) {
+        noObject = "Comporta Fechada";
+    }
+    
+    if(icomporta == 1 && ibomba == 1) {
+        noObject = "Emergência";
     }
     fill(0,0,0);
     noStroke();
@@ -205,15 +210,15 @@ void drawText() {
     text("40cm",890,470);
     textSize(20);
     // imprime dados do sonar
-    text("Objeto: " + noObject, 120, 525);
-    text("Ângulo: " + imedida_rio +"°", 500, 525);
-    text("Distância: ", 680, 525);
-    if(imedida_res<50) {
-        text("          " + imedida_res +" cm", 700, 525);
-    }
-    else {
-        text("          ---", 700, 525);  
-    }
+    text("Modo: " + noObject, 10, 525);
+    text("Altura do rio: " + imedida_rio + " cm", 310, 525);
+    text("Altura do reservatório: " + imedida_res + " cm", 580, 525);
+    //if(imedida_res<50) {
+    //    text("          " + imedida_res +" cm", 700, 525);
+    //}
+    //else {
+    //    text("          ---", 700, 525);  
+    //}
     textSize(12);
     fill(98,245,60);
     translate(485+480*cos(radians(30)),468-480*sin(radians(30)));
@@ -286,9 +291,9 @@ void serialEvent (Serial myPort) {
         bomba = data.substring(index1+2, index1+3);
         // le dados da posicao "index1+4" ate a posicao index1 e guarda em "medida_res"
         medida_res    = data.substring(index1 + 4, index1 + 7);
-         // le dado da posicao "index1+2" e guarda em "bomba"
+         // le dado da posicao "index1+8" e guarda em "erro_medida"
         erro_medida = data.substring(index1+8, index1+9);
-        // le dado da posicao "index1+2" e guarda em "bomba"
+        // le dado da posicao "index1+9" e guarda em "erro_comporta"
         erro_comporta = data.substring(index1+9, index1+10);
         println(" -> medida_rio= " + medida_rio + " comporta= " + comporta + " bomba= " + bomba + " medida_res= " + medida_res + " erro_medida= " + erro_medida
         + " erro_comporta= " + erro_comporta);
@@ -302,8 +307,8 @@ void serialEvent (Serial myPort) {
         ierro_comporta =    int(erro_comporta); 
 
 
-        println(" -> medida_rio= " + imedida_rio + " cm" + " comporta= " + comporta + " bomba= " + bomba + " medida_res= " + medida_res + " cm" + " erro_medida= " + erro_medida
-        + " erro_comporta= " + erro_comporta);
+        println(" -> medida_rio= " + imedida_rio + " cm" + " comporta= " + icomporta + " bomba= " + ibomba + " medida_res= " + imedida_res + " cm" + " erro_medida= " + ierro_medida
+        + " erro_comporta= " + ierro_comporta);
     }
     catch(RuntimeException e) {
         e.printStackTrace();
