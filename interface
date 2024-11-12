@@ -59,7 +59,7 @@ int    buttonX;
 int    buttonY;
 int    buttonSize = 90;
 color  buttonColor;
-color  currentColor;
+color  currentColor = color(90);
 boolean buttonOver = false;
 
 // keystroke
@@ -75,9 +75,9 @@ void setup() {
     smooth();
     
     orcFont = loadFont("OCRAExtended-24.vlw");
-    buttonX = width/2-buttonSize-10;
+    buttonX = width/2-buttonSize-190;
     buttonY = height/2-buttonSize/2;
-    buttonColor = color(90);
+    buttonColor = color(#FF0000);
 
     // interface serial
     //myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
@@ -101,13 +101,12 @@ void draw() {
     rect(0, -40, width, 480+40);
 
     
-    fill(98,245,31); // verde
+    //fill(98,245,31); // verde
 
     // chama funcoes para desenhar o sonar
     drawRadar();
     drawLine();
-    drawObject();
-    drawButton();
+    //drawButton();
     drawText();
     popMatrix();
 }
@@ -117,10 +116,9 @@ void drawRadar() {
     pushMatrix();
     //
     fill(255,255,255);
+    textSize(28);
     text("AquaControl", 10, 0);
-    text("Sistema de Sonar", 10, 30);
-    textSize(18);
-    text("[Porta serial: "+ porta + " " + databits+parity+int(stopbits)+ " @ " + baudrate + "]", 570, 0);
+    text("Sistema de Controle de Enchentes", 10, 40);
     //
     translate(480,480);
     noFill();
@@ -132,10 +130,6 @@ void drawRadar() {
     //arc(0,0,600,600,PI,TWO_PI);
     //arc(0,0,400,400,PI,TWO_PI);
     //arc(0,0,200,200,PI,TWO_PI);
-    
-    JButton botao1 = new JButton("Ativar Emergência");
-    //botao1.addActionListener(this);
-    
 
     // desenha segmentos radiais
     //line(-480,0,480,0);
@@ -167,7 +161,8 @@ void drawObject() {
 // funcao drawButton()
 void drawButton() {
     pushMatrix();
-    stroke(85); // vermelho
+    stroke(#180809); // vermelho
+    fill(#180809);
     rect(buttonX, buttonY, buttonSize, buttonSize);
     popMatrix();
 }   
@@ -179,7 +174,7 @@ void drawLine() {
     stroke(30,250,60);
     translate(480,480);
     // desenha linha do sonar
-    line(0,0,470*cos(radians(imedida_rio)),-470*sin(radians(imedida_rio)));
+    //line(0,0,470*cos(radians(imedida_rio)),-470*sin(radians(imedida_rio)));
     popMatrix();
 }
 
@@ -188,30 +183,27 @@ void drawText() {
   
     pushMatrix();
     // limita detecao de objetos a 100 cm
-    if(icomporta == 0 && ibomba == 0) {
-        noObject = "Comporta Fechada";
+    if(icomporta == 0) {
+        noObject = "Seguro";
     }
     
-    if(icomporta == 1 && ibomba == 0) {
-        noObject = "Comporta Fechada";
-    }
-    
-    if(icomporta == 1 && ibomba == 1) {
+    if(icomporta == 1) {
         noObject = "Emergência";
     }
     fill(0,0,0);
     noStroke();
     rect(0, 481, width, 540);
-    fill(98,245,31);
-    textSize(12);
-    text("10cm",590,470);
-    text("20cm",690,470);
-    text("30cm",790,470);
-    text("40cm",890,470);
+    if(icomporta == 0) {
+        fill(98,245,31);
+    }
+
+    if(icomporta == 1) {
+        fill(#fb0411);
+    }
     textSize(20);
     // imprime dados do sonar
-    text("Modo: " + noObject, 10, 525);
-    text("Altura do rio: " + imedida_rio + " cm", 310, 525);
+    text("Modo: " + noObject, 40, 525);
+    text("Altura do rio: " + imedida_rio + " cm", 280, 525);
     text("Altura do reservatório: " + imedida_res + " cm", 580, 525);
     //if(imedida_res<50) {
     //    text("          " + imedida_res +" cm", 700, 525);
@@ -219,27 +211,6 @@ void drawText() {
     //else {
     //    text("          ---", 700, 525);  
     //}
-    textSize(12);
-    fill(98,245,60);
-    translate(485+480*cos(radians(30)),468-480*sin(radians(30)));
-    rotate(-radians(-60));
-    text("30°",0,0);
-    resetMatrix();
-    translate(482+480*cos(radians(60)),505-480*sin(radians(60)));
-    rotate(-radians(-30));
-    text("60°",0,0);
-    resetMatrix();
-    translate(473+480*cos(radians(90)),510-480*sin(radians(90)));
-    rotate(radians(0));
-    text("90°",0,0);
-    resetMatrix();
-    translate(462+480*cos(radians(120)),515-480*sin(radians(120)));
-    rotate(radians(-30));
-    text("120°",0,0);
-    resetMatrix();
-    translate(467+480*cos(radians(150)),525-480*sin(radians(150)));
-    rotate(radians(-60));
-    text("150°",0,0);
     popMatrix(); 
 }
 
@@ -262,9 +233,9 @@ void update(int x, int y) {
 
 void mousePressed() {
 
-  if (buttonOver) {
-    currentColor = buttonColor;
-  }
+  //if (buttonOver) {
+  //  currentColor = buttonColor;
+  //}
 }
 
 // ========================================================================
