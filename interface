@@ -45,13 +45,14 @@ String medida_rio="";
 String comporta="";
 String bomba="";
 String medida_res="";
-String erro_medida="";
+String erro_medida_rio="";
+String erro_medida_res="";
 String erro_comporta="";
 
 String data="";
 String noObject;
 float  pixsDistance;
-int    imedida_rio, icomporta, ibomba, imedida_res, ierro_medida, ierro_comporta;
+int    imedida_rio, icomporta, ibomba, imedida_res, ierro_medida_rio, ierro_medida_res, ierro_comporta;
 int    index1=0;
 int    index2=0;
 PFont  orcFont;
@@ -106,6 +107,7 @@ void draw() {
     // chama funcoes para desenhar o sonar
     drawRadar();
     drawLine();
+    drawLeds();
     //drawButton();
     drawText();
     popMatrix();
@@ -156,7 +158,56 @@ void drawObject() {
         point(pixsDistance*cos(radians(imedida_rio)),-pixsDistance*sin(radians(imedida_rio)));
     }
     popMatrix();
-}   
+}
+
+// funcao drawLeds()
+void drawLeds() {
+    pushMatrix();
+    
+    stroke(#000000); // ero na comporta
+    if (ierro_comporta == 0) {
+       fill(color(90));
+    }
+    
+     if (ierro_comporta == 1) {
+       fill(#ff3918);
+    }
+    circle(width/4 - 120, 240, 100);
+    textSize(20);
+    // imprime dados do sonar
+    fill(#000000);
+    text("Erro na comporta", 20, 320);
+    
+    stroke(#000000); // Erro na medida do rio
+    if (ierro_medida_rio == 0) {
+       fill(color(90));
+    }
+    
+    if (ierro_medida_rio == 1) {
+       fill(#ff3918);
+    }
+    circle(2*width/4 - 60, 240, 100);
+    textSize(20);
+    // imprime dados do sonar
+    fill(#000000);
+    text("Erro na medida do rio", 280, 320);
+    
+    stroke(#000000); // Erro na medida do reservatório
+    if (ierro_medida_res == 0) {
+       fill(color(90));
+    }
+    
+    if (ierro_medida_res == 1) {
+       fill(#ff3918);
+    }
+    circle(3*width/4 + 60, 240, 100);
+    textSize(20);
+    // imprime dados do sonar
+    fill(#000000);
+    text("Erro na medida do reservatório", 580, 320);
+    
+    popMatrix();
+}
 
 // funcao drawButton()
 void drawButton() {
@@ -202,9 +253,9 @@ void drawText() {
     }
     textSize(20);
     // imprime dados do sonar
-    text("Modo: " + noObject, 40, 525);
-    text("Altura do rio: " + imedida_rio + " cm", 280, 525);
-    text("Altura do reservatório: " + imedida_res + " cm", 580, 525);
+    text("Modo: " + noObject, 40, 100);
+    text("Altura do rio: " + imedida_rio + " cm", 280, 100);
+    text("Altura do reservatório: " + imedida_res + " cm", 580, 100);
     //if(imedida_res<50) {
     //    text("          " + imedida_res +" cm", 700, 525);
     //}
@@ -260,26 +311,29 @@ void serialEvent (Serial myPort) {
         comporta = data.substring(index1+1, index1+2);
         // le dado da posicao "index1+2" e guarda em "bomba"
         bomba = data.substring(index1+2, index1+3);
-        // le dados da posicao "index1+4" ate a posicao index1 e guarda em "medida_res"
+        // le dados da posicao "index1+4" ate a posicao index1+7 e guarda em "medida_res"
         medida_res    = data.substring(index1 + 4, index1 + 7);
-         // le dado da posicao "index1+8" e guarda em "erro_medida"
-        erro_medida = data.substring(index1+8, index1+9);
-        // le dado da posicao "index1+9" e guarda em "erro_comporta"
-        erro_comporta = data.substring(index1+9, index1+10);
-        println(" -> medida_rio= " + medida_rio + " comporta= " + comporta + " bomba= " + bomba + " medida_res= " + medida_res + " erro_medida= " + erro_medida
-        + " erro_comporta= " + erro_comporta);
+        // le dado da posicao "index1+8" e guarda em "erro_medida_rio"
+        erro_medida_rio = data.substring(index1+8, index1+9);
+        // le dado da posicao "index1+9" e guarda em "erro_medida_res"
+        erro_medida_res = data.substring(index1+9, index1+10);
+        // le dado da posicao "index1+10" e guarda em "erro_comporta"
+        erro_comporta = data.substring(index1+10, index1+11);
+        println(" -> medida_rio= " + medida_rio + " comporta= " + comporta + " bomba= " + bomba + " medida_res= " + medida_res + " erro_medida_rio= " + erro_medida_rio +
+        " erro_medida_res"+ erro_medida_res + " erro_comporta= " + erro_comporta);
 
         // converte variaveis tipo String para tipo inteiro
-        imedida_rio    =    int(medida_rio);    // angulo em graus
-        icomporta      =    int(comporta);
-        ibomba         =    int(bomba); 
-        imedida_res    =    int(medida_res);
-        ierro_medida   =    int(erro_medida); 
-        ierro_comporta =    int(erro_comporta); 
+        imedida_rio        =    int(medida_rio);    // angulo em graus
+        icomporta          =    int(comporta);
+        ibomba             =    int(bomba); 
+        imedida_res        =    int(medida_res);
+        ierro_medida_rio   =    int(erro_medida_rio); 
+        ierro_medida_res   =    int(erro_medida_res); 
+        ierro_comporta     =    int(erro_comporta); 
 
 
-        println(" -> medida_rio= " + imedida_rio + " cm" + " comporta= " + icomporta + " bomba= " + ibomba + " medida_res= " + imedida_res + " cm" + " erro_medida= " + ierro_medida
-        + " erro_comporta= " + ierro_comporta);
+        println(" -> medida_rio= " + imedida_rio + " cm" + " comporta= " + icomporta + " bomba= " + ibomba + " medida_res= " + imedida_res + " cm" + " erro_medida_rio= " + ierro_medida_rio +
+        " erro_medida_res"+ ierro_medida_res + " erro_comporta= " + ierro_comporta);
     }
     catch(RuntimeException e) {
         e.printStackTrace();
