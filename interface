@@ -172,11 +172,11 @@ void drawLeds() {
      if (ierro_comporta == 1) {
        fill(#ff3918);
     }
-    circle(width/4 - 120, 240, 100);
+    circle(width/4 - 120, 220, 100);
     textSize(20);
     // imprime dados do sonar
     fill(#000000);
-    text("Erro na comporta", 20, 320);
+    text("Erro na comporta", 20, 300);
     
     stroke(#000000); // Erro na medida do rio
     if (ierro_medida_rio == 0) {
@@ -186,11 +186,11 @@ void drawLeds() {
     if (ierro_medida_rio == 1) {
        fill(#ff3918);
     }
-    circle(2*width/4 - 60, 240, 100);
+    circle(2*width/4 - 60, 220, 100);
     textSize(20);
     // imprime dados do sonar
     fill(#000000);
-    text("Erro na medida do rio", 280, 320);
+    text("Erro na medida do rio", 280, 300);
     
     stroke(#000000); // Erro na medida do reservatório
     if (ierro_medida_res == 0) {
@@ -200,11 +200,39 @@ void drawLeds() {
     if (ierro_medida_res == 1) {
        fill(#ff3918);
     }
-    circle(3*width/4 + 60, 240, 100);
+    circle(3*width/4 + 60, 220, 100);
     textSize(20);
     // imprime dados do sonar
     fill(#000000);
-    text("Erro na medida do reservatório", 580, 320);
+    text("Erro na medida do reservatório", 580, 300);
+    
+    stroke(#000000); // Comporta fechada
+    if (icomporta == 0) {
+       fill(color(90));
+    }
+    
+    if (icomporta == 1) {
+       fill(#ff3918);
+    }
+    circle(width/4 + 60, 380, 100);
+    textSize(20);
+    // imprime dados do sonar
+    fill(#000000);
+    text("Comporta fechada", 200, 460);
+    
+    stroke(#000000); // Bomba ligada
+    if (ibomba == 0) {
+       fill(color(90));
+    }
+    
+    if (ibomba == 1) {
+       fill(#ff3918);
+    }
+    circle(2.3*width/4 + 60, 380, 100);
+    textSize(20);
+    // imprime dados do sonar
+    fill(#000000);
+    text("Bomba ligada", 535, 460);
     
     popMatrix();
 }
