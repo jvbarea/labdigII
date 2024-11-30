@@ -32,7 +32,7 @@ Serial myPort; // definicao do objeto serial
 
 //  ======= CONFIGURACAO SERIAL ==================
 
-    String   porta= "COM26";  // <== acertar valor ***
+    String   porta= "COM29";  // <== acertar valor ***
     int   baudrate= 115200;  // 115200 bauds
     char    parity= 'O';     // E=even/par, O=odd/impar
     int   databits= 7;       // 7 bits de dados
@@ -81,9 +81,9 @@ void setup() {
     buttonColor = color(#FF0000);
 
     // interface serial
-    //myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
+    myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
     // leitura de dados da porta serial até o caractere '#' (para leitura de "angulo,distancia#"
-    //myPort.bufferUntil('#'); 
+    myPort.bufferUntil('#'); 
 
 }
 
@@ -282,8 +282,8 @@ void drawText() {
     textSize(20);
     // imprime dados do sonar
     text("Modo: " + noObject, 40, 100);
-    text("Altura do rio: " + imedida_rio + " cm", 280, 100);
-    text("Altura do reservatório: " + imedida_res + " cm", 580, 100);
+    text("Altura do rio: " + (17 - imedida_rio) + " cm", 280, 100);
+    text("Altura do reservatório: " + (18 - imedida_res) + " cm", 580, 100);
     //if(imedida_res<50) {
     //    text("          " + imedida_res +" cm", 700, 525);
     //}
